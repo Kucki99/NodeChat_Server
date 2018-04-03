@@ -96,7 +96,7 @@ function matchIgnoreCase(str1, str2) {
 }
 
 function isAuthorized(key) {
-    if (key == authKey) {
+    if (key == secret.authKey) {
         return true;
     } else {
         return false;
