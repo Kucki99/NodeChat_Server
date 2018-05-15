@@ -30,7 +30,7 @@ io.on('connection', function (socket) {
         send.date = data.date;
         socket.broadcast.emit('globalmessage', send);
         console.log("[Global message] from: " + send.from + ", message: " + send.msg);
-        ack(true);
+        ack();
     });
 
     socket.on('new_privatemessage', function (data) {
@@ -40,6 +40,14 @@ io.on('connection', function (socket) {
         io.to(getUserFromName(data.receiver).id).emit('privatemessage', send);
         console.log("[Private message] from: " + send.from + ", to: " + getUserFromName(data.receiver).name + ", message: " + send.msg);
         //io.to(socket.id).emit();
+    });
+
+    socket.on('change_nick', function (data, ack) {
+        var new_nick = data.nick;
+        var user = getUser(socket.id);
+        console.log("[Nick change] " + user.name + " changed nick to " + new_nick);
+        user.name = new_nick;
+        ack();
     });
 
     socket.on('getUsers', function () {
