@@ -45,9 +45,14 @@ io.on('connection', function (socket) {
     socket.on('change_nick', function (data, ack) {
         var new_nick = data.nick;
         var user = getUser(socket.id);
-        console.log("[Nick change] " + user.name + " changed nick to " + new_nick);
-        user.name = new_nick;
-        ack();
+        if(containsNick(new_nick)) {
+            ack(false);
+            console.log("[Nick change] " + user.name + " tried to change nick to " + new_nick + ", but it is already taken");
+        } else {
+            ack(true);
+            console.log("[Nick change] " + user.name + " changed nick to " + new_nick);
+            user.name = new_nick;
+        }
     });
 
     socket.on('getUsers', function () {
