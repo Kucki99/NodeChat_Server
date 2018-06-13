@@ -45,7 +45,7 @@ io.on('connection', function (socket) {
     socket.on('change_nick', function (data, ack) {
         var new_nick = data.nick;
         var user = getUser(socket.id);
-        if(containsNick(new_nick)) {
+        if (containsNick(new_nick)) {
             ack(false);
             console.log("[Nick change] " + user.name + " tried to change nick to " + new_nick + ", but it is already taken");
         } else {
@@ -61,15 +61,17 @@ io.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function () {
-        console.log(getUser(socket.id).name + " disconnected!");
-        io.sockets.emit('userDisconnect', getUser(socket.id));
-        removeUser(socket.id);
+        if (getUser(socket.id) != null) {
+            io.sockets.emit('userDisconnect', getUser(socket.id));
+            console.log(getUser(socket.id).name + " disconnected!");
+            removeUser(socket.id);
+        }
     });
 });
 
 function getUser(id) {
     for (var i = 0; i < users.length; i++) {
-        if (users[i].id == id) {
+        if (matchIgnoreCase(users[i].id, id)) {
             return users[i];
         }
     }
@@ -77,7 +79,7 @@ function getUser(id) {
 
 function getUserFromName(name) {
     for (var i = 0; i < users.length; i++) {
-        if (users[i].name == name) {
+        if (users[i].name === name) {
             return users[i];
         }
     }
@@ -85,7 +87,7 @@ function getUserFromName(name) {
 
 function removeUser(id) {
     for (var i = 0; i < users.length; i++) {
-        if (users[i].id == id) {
+        if (users[i].id === id) {
             users.splice(i, 1);
         }
     }
@@ -101,7 +103,7 @@ function containsNick(nick) {
 }
 
 function matchIgnoreCase(str1, str2) {
-    if (str1.toLowerCase() == str2.toLowerCase()) {
+    if (str1.toLowerCase() === str2.toLowerCase()) {
         return true;
     } else {
         return false;
@@ -109,7 +111,7 @@ function matchIgnoreCase(str1, str2) {
 }
 
 function isAuthorized(key) {
-    if (key == secret.authKey) {
+    if (key === secret.authKey) {
         return true;
     } else {
         return false;
@@ -117,15 +119,15 @@ function isAuthorized(key) {
 }
 
 function checkNick(socket, nick) {
-    console.log("Checking nick...");
+    console.log("[I] Checking nick " + nick);
     if (!containsNick(nick)) {
         io.to(socket.id).emit('suclogin');
         var newbie = new user(socket.id, nick);
         socket.broadcast.emit('userConnect', newbie);
         users.push(newbie);
-        console.log("New User: " + newbie.name);
+        console.log("[I] New User: " + newbie.name);
     } else {
-        io.to(socket.id).emit('nologin');
+        io.to(socket.id).emit('nickname_taken');
         console.log('[I] Username: ' + nick + ' is already taken');
     }
 }
