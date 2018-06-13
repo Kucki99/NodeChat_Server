@@ -9,8 +9,8 @@ var users = [];
 
 var secret = require('./secret');
 
-server.listen(secret.port, function () {
-    console.log("Server is now running on port " + secret.port);
+server.listen(secret.testport, function () {
+    console.log("Server is now running on port " + secret.testport);
 });
 
 
