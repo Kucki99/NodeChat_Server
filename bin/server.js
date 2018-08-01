@@ -7,7 +7,8 @@ io.set('heartbeat timeout', 2000);
 
 var users = [];
 
-var secret = require('./secret');
+let secret = require('../classes/secret');
+let Database = require('../classes/Database');
 
 server.listen(secret.port, function () {
     console.log("Server is now running on port " + secret.port);
