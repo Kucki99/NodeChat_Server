@@ -8,9 +8,11 @@ io.set('heartbeat timeout', 2000);
 var users = [];
 
 var secret = require('../classes/secret');
+let MongoDB = require('../classes/MongoDB');
 
 server.listen(secret.testport, function () {
     console.log("Server is now running on port " + secret.testport);
+    MongoDB.getInstance();
 });
 
 
