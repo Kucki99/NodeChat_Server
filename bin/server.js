@@ -9,9 +9,11 @@ var users = [];
 
 let secret = require('../classes/secret');
 let Database = require('../classes/Database');
+let MongoDB = require('../classes/MongoDB');
 
 server.listen(secret.port, function () {
     console.log("Server is now running on port " + secret.port);
+    MongoDB.getInstance();
 });
 
 
