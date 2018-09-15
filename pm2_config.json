@@ -1,0 +1,13 @@
+{
+  apps: [{
+    name: 'nodechat_production',
+    script: './bin/server.js',
+    watch: true,
+    instances: 1
+  }, {
+    name: 'nodechat_test',
+    script: './bin/testServer.js',
+    watch: true,
+    instances: 1
+  }]
+}
