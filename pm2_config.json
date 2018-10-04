@@ -1,0 +1,15 @@
+{
+  apps: [{
+    name: 'nodechat_production',
+    script: './bin/server.js',
+    watch: true,
+    instances: "max",
+    "exec_mode" : "cluster"
+  }, {
+    name: 'nodechat_test',
+    script: './bin/testServer.js',
+    watch: true,
+    instances: "max",
+    "exec_mode" : "cluster"
+  }]
+}
